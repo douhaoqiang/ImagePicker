@@ -73,6 +73,12 @@ public class CropUtils {
         //是否隐藏底部控制菜单
         options.setHideBottomControls(true);
 
+//        options.setToolbarTitle("");//标题
+        options.setCircleDimmedLayer(true);//是否显示圆形
+//        options.setStatusBarColor();
+//        options.setToolbarColor();
+//        options.setToolbarWidgetColor();
+
         //是否自由比例裁剪
         options.setFreeStyleCropEnabled(builder.isFreeScale());
 
