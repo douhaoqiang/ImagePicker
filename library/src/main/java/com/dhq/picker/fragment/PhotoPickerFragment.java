@@ -220,7 +220,7 @@ public class PhotoPickerFragment extends Fragment {
 
     private void openCamera() {
         try {
-            Intent intent = captureManager.dispatchTakePictureIntent();
+            Intent intent = captureManager.getTakePictureIntent();
             startActivityForResult(intent, ImageCaptureManager.REQUEST_TAKE_PHOTO);
         } catch (IOException e) {
             e.printStackTrace();
@@ -233,12 +233,11 @@ public class PhotoPickerFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ImageCaptureManager.REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-
+            //拍照返回
             if (captureManager == null) {
-                FragmentActivity activity = getActivity();
-                captureManager = new ImageCaptureManager(activity);
+                captureManager = new ImageCaptureManager(getActivity());
             }
-
+            //扫描拍照路径，添加拍照图片
             captureManager.galleryAddPic();
             if (directories.size() > 0) {
                 String path = captureManager.getCurrentPhotoPath();
