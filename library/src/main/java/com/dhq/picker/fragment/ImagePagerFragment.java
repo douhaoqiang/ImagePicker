@@ -105,11 +105,10 @@ public class ImagePagerFragment extends Fragment {
     Bundle bundle = getArguments();
 
     if (bundle != null) {
-      String[] pathArr = bundle.getStringArray(ARG_PATH);
+      ArrayList<String> pathArr = bundle.getStringArrayList(ARG_PATH);
       paths.clear();
       if (pathArr != null) {
-
-        paths = new ArrayList<>(Arrays.asList(pathArr));
+        paths.addAll(pathArr);
       }
 
       hasAnim         = bundle.getBoolean(ARG_HAS_ANIM);

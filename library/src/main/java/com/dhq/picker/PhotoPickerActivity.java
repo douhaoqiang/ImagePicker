@@ -22,12 +22,13 @@ public class PhotoPickerActivity extends AppCompatActivity {
     private ImagePagerFragment imagePagerFragment;
 
     private int maxCount = PhotoPicker.DEFAULT_MAX_COUNT;
-
+    private boolean showCamera=true;//是否展示相机(默认展示)
 
     private int columnNumber = PhotoPicker.DEFAULT_COLUMN_NUMBER;
     private ArrayList<String> originalPhotos = null;
 
     private TextView downCountTv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_photo_picker_lay);
 
-        boolean showCamera = getIntent().getBooleanExtra(PhotoPicker.EXTRA_SHOW_CAMERA, true);//是否展示相机
+        showCamera = getIntent().getBooleanExtra(PhotoPicker.EXTRA_SHOW_CAMERA, true);//是否展示相机
 
         boolean previewEnabled = getIntent().getBooleanExtra(PhotoPicker.EXTRA_PREVIEW_ENABLED, true);//是否可以预览
 
