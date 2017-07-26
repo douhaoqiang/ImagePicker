@@ -78,8 +78,8 @@ public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder>
   }
 
 
-  public List<String> getCurrentPhotoPaths() {
-    List<String> currentPhotoPaths = new ArrayList<>(getCurrentPhotos().size());
+  public ArrayList<String> getCurrentPhotoPaths() {
+    ArrayList<String> currentPhotoPaths = new ArrayList<>(getCurrentPhotos().size());
     for (Photo photo : getCurrentPhotos()) {
       currentPhotoPaths.add(photo.getPath());
     }

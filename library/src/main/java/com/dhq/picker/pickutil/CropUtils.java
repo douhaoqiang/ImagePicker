@@ -53,7 +53,7 @@ public class CropUtils {
     public static void startCropActivity(Activity activity, @NonNull Uri uri, Builder builder) {
 
         //设置剪裁的图片 和 剪裁完保存的图片
-        UCrop uCrop = UCrop.of(uri, getSavePath(activity));
+        MyUCorp uCrop = MyUCorp.of(uri, getSavePath(activity));
 
         //设置图片的裁剪宽高比例
         uCrop = uCrop.withAspectRatio(builder.getwScale(), builder.gethScale());
@@ -71,10 +71,10 @@ public class CropUtils {
         options.setCompressionQuality(builder.getCompressionQuality());
 
         //是否隐藏底部控制菜单
-        options.setHideBottomControls(true);
+//        options.setHideBottomControls(true);
 
 //        options.setToolbarTitle("");//标题
-        options.setCircleDimmedLayer(true);//是否显示圆形
+//        options.setCircleDimmedLayer(true);//是否显示圆形
 //        options.setStatusBarColor();
 //        options.setToolbarColor();
 //        options.setToolbarWidgetColor();

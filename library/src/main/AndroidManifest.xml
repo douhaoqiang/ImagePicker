@@ -18,11 +18,18 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
 
+        <!--&lt;!&ndash; 图片剪裁界面 &ndash;&gt;-->
+        <!--<activity-->
+            <!--android:name="com.yalantis.ucrop.UCropActivity"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/Theme.AppCompat.Light.NoActionBar" />-->
+
         <!-- 图片剪裁界面 -->
         <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
+            android:name=".MyUCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
 
         <provider
             android:name="android.support.v4.content.FileProvider"

@@ -160,7 +160,7 @@ public class PhotoPickerFragment extends Fragment {
             public void onClick(View v, int position, boolean showCamera) {
                 final int index = showCamera ? position - 1 : position;
 
-                List<String> photos = photoGridAdapter.getCurrentPhotoPaths();
+                ArrayList<String> photos = photoGridAdapter.getCurrentPhotoPaths();
 
                 int[] screenLocation = new int[2];
                 v.getLocationOnScreen(screenLocation);

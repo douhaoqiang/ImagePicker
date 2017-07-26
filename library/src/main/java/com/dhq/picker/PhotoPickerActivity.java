@@ -4,16 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import com.dhq.picker.entity.Photo;
 import com.dhq.picker.event.OnItemCheckListener;
 import com.dhq.picker.fragment.ImagePagerFragment;
 import com.dhq.picker.fragment.PhotoPickerFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class PhotoPickerActivity extends AppCompatActivity {
@@ -22,7 +23,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
     private ImagePagerFragment imagePagerFragment;
 
     private int maxCount = PhotoPicker.DEFAULT_MAX_COUNT;
-    private boolean showCamera=true;//是否展示相机(默认展示)
+    private boolean showCamera = true;//是否展示相机(默认展示)
 
     private int columnNumber = PhotoPicker.DEFAULT_COLUMN_NUMBER;
     private ArrayList<String> originalPhotos = null;
@@ -44,9 +45,18 @@ public class PhotoPickerActivity extends AppCompatActivity {
         columnNumber = getIntent().getIntExtra(PhotoPicker.EXTRA_GRID_COLUMN, PhotoPicker.DEFAULT_COLUMN_NUMBER);//展示的列数
         originalPhotos = getIntent().getStringArrayListExtra(PhotoPicker.EXTRA_ORIGINAL_PHOTOS);//原始的图片
 
-        downCountTv = (TextView) findViewById(R.id.toolbar_done_tv);//已经选择的张数
+        ImageView ivBack = (ImageView) findViewById(R.id.toolbar_back_iv);//返回按钮
+        downCountTv = (TextView) findViewById(R.id.toolbar_done_tv);//已经选择的张数（完成）
+
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         pickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentByTag("tag");
+
         if (pickerFragment == null) {
             pickerFragment = PhotoPickerFragment.newInstance(showCamera, previewEnabled, columnNumber, maxCount, originalPhotos);
             getSupportFragmentManager()
@@ -62,6 +72,8 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
                 downCountTv.setEnabled(selectedItemCount > 0);
 
+
+
                 if (maxCount <= 1) {
                     List<String> photos = pickerFragment.getPhotoGridAdapter().getSelectedPhotos();
                     if (!photos.contains(photo.getPath())) {
@@ -76,6 +88,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     return false;
                 }
+
                 downCountTv.setText(getString(R.string.__picker_done_with_count, selectedItemCount, maxCount));
                 return true;
             }
@@ -86,11 +99,13 @@ public class PhotoPickerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ArrayList<String> selectedPhotos = pickerFragment.getPhotoGridAdapter().getSelectedPhotoPaths();
-                if(selectedPhotos!=null || selectedPhotos.size()>0){
+                if (selectedPhotos != null && selectedPhotos.size() > 0) {
                     Intent intent = new Intent();
                     intent.putStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS, selectedPhotos);
                     setResult(RESULT_OK, intent);
                     finish();
+                } else {
+                    showToastMsg("请先选择图片");
                 }
             }
         });
@@ -129,6 +144,11 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
     public PhotoPickerActivity getActivity() {
         return this;
+    }
+
+
+    private void showToastMsg(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
 }

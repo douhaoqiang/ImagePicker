@@ -58,12 +58,12 @@ public class ImagePagerFragment extends Fragment {
   private int currentItem = 0;
 
 
-  public static ImagePagerFragment newInstance(List<String> paths, int currentItem) {
+  public static ImagePagerFragment newInstance(ArrayList<String> paths, int currentItem) {
 
     ImagePagerFragment f = new ImagePagerFragment();
 
     Bundle args = new Bundle();
-    args.putStringArray(ARG_PATH, paths.toArray(new String[paths.size()]));
+    args.putStringArrayList(ARG_PATH, paths);
     args.putInt(ARG_CURRENT_ITEM, currentItem);
     args.putBoolean(ARG_HAS_ANIM, false);
 
@@ -73,7 +73,7 @@ public class ImagePagerFragment extends Fragment {
   }
 
 
-  public static ImagePagerFragment newInstance(List<String> paths, int currentItem, int[] screenLocation, int thumbnailWidth, int thumbnailHeight) {
+  public static ImagePagerFragment newInstance(ArrayList<String> paths, int currentItem, int[] screenLocation, int thumbnailWidth, int thumbnailHeight) {
 
     ImagePagerFragment f = newInstance(paths, currentItem);
 
@@ -119,7 +119,7 @@ public class ImagePagerFragment extends Fragment {
       thumbnailHeight = bundle.getInt(ARG_THUMBNAIL_HEIGHT);
     }
 
-    mPagerAdapter = new PhotoPagerAdapter(Glide.with(this), paths);
+    mPagerAdapter = new PhotoPagerAdapter(Glide.with(getActivity()), paths);
   }
 
 
