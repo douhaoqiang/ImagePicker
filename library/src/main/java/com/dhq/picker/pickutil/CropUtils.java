@@ -35,7 +35,7 @@ public class CropUtils {
      * @param uri
      * @param isFreeScale 剪裁比例是否可调节
      */
-    public static void startCropActivity(Activity activity, @NonNull Uri uri, boolean isFreeScale) {
+    protected static void startCropActivity(Activity activity, @NonNull Uri uri, boolean isFreeScale) {
 
         Builder builder = Builder.getInstance().setIsFreeScale(isFreeScale);
 
@@ -50,7 +50,7 @@ public class CropUtils {
      * @param uri      图片路径
      * @param builder  剪裁设置
      */
-    public static void startCropActivity(Activity activity, @NonNull Uri uri, Builder builder) {
+    protected static void startCropActivity(Activity activity, @NonNull Uri uri, Builder builder) {
 
         //设置剪裁的图片 和 剪裁完保存的图片
         MyUCorp uCrop = MyUCorp.of(uri, getSavePath(activity));
@@ -96,7 +96,7 @@ public class CropUtils {
     }
 
 
-    public static class Builder {
+    protected static class Builder {
 
         private float wScale = 1;//宽比例
         private float hScale = 1;//高比例
@@ -104,7 +104,7 @@ public class CropUtils {
         private int maxWidth;//最大宽度
         private int maxHeight;//最大高度
 
-        private boolean isFreeScale = true;//最大高度
+        private boolean isFreeScale = true;//剪切比例是否可调
 
         private int compressionQuality = 100;//压缩质量[ 0 ~ 100 ]
 

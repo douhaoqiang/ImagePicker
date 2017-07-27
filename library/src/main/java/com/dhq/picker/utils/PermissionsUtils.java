@@ -1,6 +1,7 @@
 package com.dhq.picker.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -59,5 +60,6 @@ public class PermissionsUtils {
         }
         return cameraPermissionGranted;
     }
+
 
 }

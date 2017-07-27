@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-
 import static android.app.Activity.RESULT_OK;
 
 /**
@@ -25,9 +24,9 @@ import static android.app.Activity.RESULT_OK;
 public class ImagePickUtils {
 
     private static Activity _activity;
-    private static PickSingleCallBack _singleCallBack;
-    private static PickMulCallBack _mulCallBack;
-    private static boolean isCrop = true;//表示是否需要剪裁（true-需要剪裁, false-不需要剪裁 默认剪裁）
+    public static PickSingleCallBack _singleCallBack;
+    public static PickMulCallBack _mulCallBack;
+    private static boolean mIsCrop = true;//表示是否需要剪裁（true-需要剪裁, false-不需要剪裁 默认剪裁）
     private static boolean isOnlyOne = true;//表示是否是单选
 
     private static ImagePickUtils pickPicUtils;
@@ -38,17 +37,31 @@ public class ImagePickUtils {
 
     /**
      * 选择照片（单选）
+     * @param activity
+     * @param callBack 回调
      */
-    public static void pickPic(Activity activity,PickSingleCallBack callBack) {
+    public static void pickPic(Activity activity, PickSingleCallBack callBack) {
+        pickPic(activity, true, callBack);
+    }
+
+    /**
+     * 选择照片（单选）
+     *
+     * @param activity
+     * @param isCanCrop 是否可以剪裁
+     * @param callBack  回调
+     */
+    public static void pickPic(Activity activity, boolean isCanCrop, PickSingleCallBack callBack) {
         pickPicUtils = new ImagePickUtils(activity);
         _singleCallBack = callBack;
-
+        mIsCrop = isCanCrop;
         PhotoPicker.builder()
                 .setPhotoCount(1)
-                .setShowCamera(true)
+                .setShowPickType(true)
                 .setPreviewEnabled(true)
                 .start(_activity);
     }
+
 
     /**
      * 选择照片（多选）
@@ -56,7 +69,7 @@ public class ImagePickUtils {
      * @param num
      * @param callBack
      */
-    public static void pickMulPic(Activity activity,int num, PickMulCallBack callBack) {
+    public static void pickMulPic(Activity activity, int num, PickMulCallBack callBack) {
         pickPicUtils = new ImagePickUtils(activity);
         if (num < 1) {
             return;
@@ -66,7 +79,7 @@ public class ImagePickUtils {
         isOnlyOne = false;
         PhotoPicker.builder()
                 .setPhotoCount(num)
-                .setShowCamera(true)
+                .setShowPickType(false)
                 .setPreviewEnabled(true)
                 .start(_activity);
     }
@@ -88,7 +101,7 @@ public class ImagePickUtils {
                 List<String> photos = null;
                 if (data != null) {
                     photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
-                    if (isCrop && isOnlyOne) {
+                    if (mIsCrop && isOnlyOne) {
                         Uri uri = Uri.fromFile(new File(photos.get(0)));
                         cropPic(uri);
                     } else {
@@ -105,10 +118,10 @@ public class ImagePickUtils {
                 //剪切结果
                 final Uri resultUri = UCrop.getOutput(data);
 
-                if(_singleCallBack!=null){
+                if (_singleCallBack != null) {
                     try {
-                        Bitmap bmp =  MediaStore.Images.Media.getBitmap(_activity.getContentResolver(), resultUri);
-                        _singleCallBack.result(resultUri.getPath(),bmp);
+                        Bitmap bmp = MediaStore.Images.Media.getBitmap(_activity.getContentResolver(), resultUri);
+                        _singleCallBack.result(resultUri.getPath(), bmp);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -123,6 +136,7 @@ public class ImagePickUtils {
 
         /**
          * 多选图片回调
+         *
          * @param pics 图片路径集合
          */
         void result(List<String> pics);
@@ -133,13 +147,13 @@ public class ImagePickUtils {
 
         /**
          * 单选图片回调
-         * @param imgPath        图片地址
-         * @param picBitmap      图片的Bitmap对象
+         *
+         * @param imgPath   图片地址
+         * @param picBitmap 图片的Bitmap对象
          */
         void result(String imgPath, Bitmap picBitmap);
 
     }
-
 
 
 }

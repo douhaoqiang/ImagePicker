@@ -25,6 +25,7 @@ public class PhotoPicker {
   public final static String KEY_SELECTED_PHOTOS   = "SELECTED_PHOTOS";
 
   public final static String EXTRA_MAX_COUNT       = "MAX_COUNT";
+  public final static String EXTRA_SHOW_PICK_TYPE       = "SHOW_PICK_TYPE";
   public final static String EXTRA_SHOW_CAMERA     = "SHOW_CAMERA";
   public final static String EXTRA_GRID_COLUMN     = "column";
   public final static String EXTRA_ORIGINAL_PHOTOS = "ORIGINAL_PHOTOS";
@@ -109,14 +110,13 @@ public class PhotoPicker {
       return this;
     }
 
-
-    public PhotoPickerBuilder setShowCamera(boolean showCamera) {
-      mPickerOptionsBundle.putBoolean(EXTRA_SHOW_CAMERA, showCamera);
+    public PhotoPickerBuilder setSelected(ArrayList<String> imagesUri) {
+      mPickerOptionsBundle.putStringArrayList(EXTRA_ORIGINAL_PHOTOS, imagesUri);
       return this;
     }
 
-    public PhotoPickerBuilder setSelected(ArrayList<String> imagesUri) {
-      mPickerOptionsBundle.putStringArrayList(EXTRA_ORIGINAL_PHOTOS, imagesUri);
+    public PhotoPickerBuilder setShowPickType(boolean isShowPickType) {
+      mPickerOptionsBundle.putBoolean(EXTRA_SHOW_PICK_TYPE, isShowPickType);
       return this;
     }
 
