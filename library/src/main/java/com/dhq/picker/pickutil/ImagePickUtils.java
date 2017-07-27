@@ -37,6 +37,7 @@ public class ImagePickUtils {
 
     /**
      * 选择照片（单选）
+     *
      * @param activity
      * @param callBack 回调
      */
