@@ -20,6 +20,7 @@ import com.dhq.picker.fragment.PhotoPickerFragment;
 import com.dhq.picker.fragment.PickTypeFragment;
 import com.dhq.picker.pickutil.CropUtils;
 import com.dhq.picker.pickutil.ImagePickUtils;
+import com.dhq.picker.pickutil.MyUCorp;
 import com.dhq.picker.utils.ImageCaptureManager;
 import com.yalantis.ucrop.UCrop;
 
@@ -78,14 +79,19 @@ public class PhotoPickerActivity extends AppCompatActivity {
                 ArrayList<String> selectedPhotos = pickerFragment.getPhotoGridAdapter().getSelectedPhotoPaths();
                 if (selectedPhotos != null && selectedPhotos.size() > 0) {
 
-                    if (ImagePickUtils._mulCallBack != null) {
+                    if (ImagePickUtils.isOnlyOne) {
+                        //表示是单选
+                        singleImageHandle(selectedPhotos.get(0));
+
+                    } else if (ImagePickUtils._mulCallBack != null) {
                         try {
                             ImagePickUtils._mulCallBack.result(selectedPhotos);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        finish();
                     }
-                    finish();
+
                 } else {
                     showToastMsg("请先选择图片");
                 }
@@ -187,14 +193,10 @@ public class PhotoPickerActivity extends AppCompatActivity {
                 return;
             }
 
-            File f = new File(currentPhotoPath);
-            Uri contentUri = Uri.fromFile(f);
-            if (maxCount == 1) {
-                //启动剪裁
-                CropUtils.startCropActivity(this, contentUri);
-            }
+            singleImageHandle(currentPhotoPath);
 
-        } else if (requestCode == UCrop.REQUEST_CROP) {
+
+        } else if (requestCode == MyUCorp.REQUEST_CROP) {
             //剪切结果
             final Uri resultUri = UCrop.getOutput(data);
 
@@ -208,13 +210,36 @@ public class PhotoPickerActivity extends AppCompatActivity {
             }
             finish();
 
-        }else {
-            super.onActivityResult(requestCode,resultCode, data);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
 
-//        ImagePickUtils.pickPicResult(requestCode, resultCode, data);
-
     }
+
+
+    /**
+     * 单选图片处理
+     * @param path
+     */
+    private void singleImageHandle(String path){
+
+        File f = new File(path);
+        Uri contentUri = Uri.fromFile(f);
+
+        if(ImagePickUtils.mIsCrop){
+            //启动剪裁
+            CropUtils.startCropActivity(getActivity(), contentUri);
+        }else if(ImagePickUtils._singleCallBack!=null){
+            try {
+                Bitmap bmp= MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
+                ImagePickUtils._singleCallBack.result(contentUri.getPath(), bmp);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            finish();
+        }
+    }
+
 
 
     /**

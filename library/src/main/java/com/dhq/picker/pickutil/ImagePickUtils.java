@@ -26,8 +26,8 @@ public class ImagePickUtils {
     private static Activity _activity;
     public static PickSingleCallBack _singleCallBack;
     public static PickMulCallBack _mulCallBack;
-    private static boolean mIsCrop = true;//表示是否需要剪裁（true-需要剪裁, false-不需要剪裁 默认剪裁）
-    private static boolean isOnlyOne = true;//表示是否是单选
+    public static boolean mIsCrop = true;//表示是否需要剪裁（true-需要剪裁, false-不需要剪裁 默认剪裁）
+    public static boolean isOnlyOne = true;//表示是否是单选
 
     private static ImagePickUtils pickPicUtils;
 
@@ -91,45 +91,6 @@ public class ImagePickUtils {
      */
     private static void cropPic(Uri uri) {
         CropUtils.startCropActivity(_activity, uri);
-    }
-
-
-    //选择图片的结果处理
-    public static void pickPicResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == PhotoPicker.REQUEST_CODE) {
-                //选择图片回调
-                List<String> photos = null;
-                if (data != null) {
-                    photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
-                    if (mIsCrop && isOnlyOne) {
-                        Uri uri = Uri.fromFile(new File(photos.get(0)));
-                        cropPic(uri);
-                    } else {
-                        if (_mulCallBack != null) {
-                            _mulCallBack.result(photos);
-                        }
-                    }
-                }
-
-            } else if (requestCode == PhotoPreview.REQUEST_CODE) {
-                //预览图片
-
-            } else if (requestCode == UCrop.REQUEST_CROP) {
-                //剪切结果
-                final Uri resultUri = UCrop.getOutput(data);
-
-                if (_singleCallBack != null) {
-                    try {
-                        Bitmap bmp = MediaStore.Images.Media.getBitmap(_activity.getContentResolver(), resultUri);
-                        _singleCallBack.result(resultUri.getPath(), bmp);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            }
-        }
     }
 
 
