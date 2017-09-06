@@ -115,7 +115,7 @@ public class PhotoPickerFragment extends Fragment {
             }
         });
 
-        captureManager = new ImageCaptureManager(getActivity());
+        captureManager = new ImageCaptureManager(getContext());
     }
 
 

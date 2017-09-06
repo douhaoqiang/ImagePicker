@@ -208,6 +208,8 @@ public class PhotoPickerActivity extends AppCompatActivity {
             }
             finish();
 
+        }else {
+            super.onActivityResult(requestCode,resultCode, data);
         }
 
 //        ImagePickUtils.pickPicResult(requestCode, resultCode, data);
