@@ -1,6 +1,5 @@
 package com.dhq.picker;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,9 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
         imageView = (ImageView) findViewById(R.id.demo_select_pic_iv);
 
-//        findViewById(R.id.demo_select_pic_btn).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
+        findViewById(R.id.demo_select_pic_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 //                ImagePickUtils.pickPic(MainActivity.this, new ImagePickUtils.PickSingleCallBack() {
 //
 //                    @Override
@@ -39,23 +38,20 @@ public class MainActivity extends AppCompatActivity {
 //                        imageView.setImageBitmap(picBitmap);
 //                    }
 //                });
-//            }
-//        });
 
 
-        findViewById(R.id.demo_select_pic_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ImagePickUtils.pickMulPic(MainActivity.this,6, new ImagePickUtils.PickMulCallBack() {
+                ImagePickUtils.pickMulPic(MainActivity.this, 6, new ImagePickUtils.PickMulCallBack() {
 
                     @Override
                     public void result(List<String> pics) {
-                        Glide.with(MainActivity.this).load(Uri.fromFile(new File(pics.get(1)))).into(imageView);
+                        Glide.with(MainActivity.this).load(Uri.fromFile(new File(pics.get(0)))).into(imageView);
                     }
 
                 });
+
             }
         });
+
 
     }
 
