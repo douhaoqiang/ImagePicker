@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_photo_pager_header"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/__picker_item_photo_border_selected">
+
+        <ImageView
+            android:id="@+id/iv_photo_header_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/header_back" />
+
+        <TextView
+            android:id="@+id/tv_photo_header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="浏览图片" />
+
+        <TextView
+            android:id="@+id/tv_photo_header_delect"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:gravity="center"
+            android:text="删除" />
+
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_photos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black">
+
+    </android.support.v4.view.ViewPager>
+
+</LinearLayout>
