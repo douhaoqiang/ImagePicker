@@ -1,16 +1,20 @@
 package com.dhq.picker.dialog;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dhq.picker.R;
@@ -23,23 +27,23 @@ import java.util.List;
  * Created by douhaoqiang on 2017/9/11.
  */
 
-public class PhotoPagerDialog extends DialogFragment {
+public class PhotoPagerDialog<T> extends DialogFragment {
 
 
-    private static CallBack mCallBack;
+    private static PhotoPagerCallback mCallBack;
     //    private float dimAmount = 0.5f;//灰度深浅
     private boolean outCancel = true;//是否点击外部取消
-    private PhotoAdapter<String> mPagerAdapter;
+    private PhotoAdapter<T> mPagerAdapter;
     private ViewPager mViewPager;
-    private List<String> mPaths;
+    private static List mPaths;
+    private ImageView mIvBack;
+    private TextView mTvDelect;
 
 
-    public static PhotoPagerDialog getInstance(ArrayList<String> paths,CallBack callBack){
-        mCallBack=callBack;
+    public static PhotoPagerDialog getInstance(ArrayList paths, PhotoPagerCallback callBack) {
+        mCallBack = callBack;
+        mPaths = paths;
         PhotoPagerDialog photoPagerDialog = new PhotoPagerDialog();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("photos",paths);
-        photoPagerDialog.setArguments(bundle);
         return photoPagerDialog;
     }
 
@@ -66,15 +70,53 @@ public class PhotoPagerDialog extends DialogFragment {
         super.onActivityCreated(savedInstanceState);
 //        convertView(ViewHolder.create(getView()), this);
 
-        mPaths= (List<String>) getArguments().getSerializable("photos");
-
+        mIvBack = (ImageView) getView().findViewById(R.id.iv_photo_header_back);
         mViewPager = (ViewPager) getView().findViewById(R.id.vp_photos);
-        mPagerAdapter = new PhotoAdapter<>(Glide.with(getActivity()), mPaths, new PhotoAdapter.PagerCallBack<String>() {
+        mTvDelect = (TextView) getView().findViewById(R.id.tv_photo_header_delect);
+
+
+        mIvBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public String getImagePath(String data) {
-                return data;
+            public void onClick(View v) {
+                dismiss();
             }
         });
+
+        mTvDelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (mPaths.size() == 0) {
+                    dismiss();
+                }
+
+                final int currentPosition = mViewPager.getCurrentItem();
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.__picker_confirm_to_delete)
+                        .setPositiveButton(R.string.__picker_yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                                mPagerAdapter.removeItem(currentPosition);
+                                mCallBack.removeImage(currentPosition);
+                                if (mPaths.size() == 0) {
+                                    dismiss();
+                                }
+                            }
+                        })
+                        .setNegativeButton(R.string.__picker_cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .show();
+
+
+            }
+        });
+
+        mPagerAdapter = new PhotoAdapter<>(Glide.with(getActivity()), mPaths, mCallBack);
         mViewPager.setAdapter(mPagerAdapter);
     }
 
@@ -106,6 +148,13 @@ public class PhotoPagerDialog extends DialogFragment {
         return this;
     }
 
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        mCallBack = null;
+        mPaths.clear();
+        mPaths = null;
+    }
 
     public static class ViewHolder {
 
@@ -134,13 +183,6 @@ public class PhotoPagerDialog extends DialogFragment {
             return convertView;
         }
 
-
-    }
-
-
-    public interface CallBack{
-
-        void delectImage(int position);
 
     }
 

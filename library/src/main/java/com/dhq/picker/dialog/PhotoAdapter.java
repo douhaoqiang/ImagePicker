@@ -20,11 +20,11 @@ import java.util.List;
 
 public class PhotoAdapter<T> extends PagerAdapter {
 
-    private final PagerCallBack mPagerCallBack;
+    private final PhotoPagerCallback mPagerCallBack;
     private List<T> paths = new ArrayList<>();
     private RequestManager mGlide;
 
-    public PhotoAdapter(RequestManager glide, List<T> paths, PagerCallBack pagerCallBack) {
+    public PhotoAdapter(RequestManager glide, List<T> paths, PhotoPagerCallback pagerCallBack) {
         this.paths = paths;
         this.mGlide = glide;
         this.mPagerCallBack = pagerCallBack;
@@ -102,17 +102,13 @@ public class PhotoAdapter<T> extends PagerAdapter {
         return POSITION_NONE;
     }
 
-
-    public interface PagerCallBack<T> {
-
-        /**
-         * 获取图片的显示路径
-         *
-         * @param data
-         * @return
-         */
-        String getImagePath(T data);
-
+    public void removeItem(int position) {
+        paths.remove(position);
+        if (mPagerCallBack != null) {
+            mPagerCallBack.removeImage(position);
+        }
+        notifyDataSetChanged();
     }
+
 
 }

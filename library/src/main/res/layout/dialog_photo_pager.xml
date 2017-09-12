@@ -13,7 +13,7 @@
         <ImageView
             android:id="@+id/iv_photo_header_back"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:src="@drawable/header_back" />
 
         <TextView
