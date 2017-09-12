@@ -36,17 +36,22 @@ public class PhotoPagerDialog<T> extends DialogFragment {
     private PhotoAdapter<T> mPagerAdapter;
     private ViewPager mViewPager;
     private static List mPaths;
+    private static int mIndex;
     private ImageView mIvBack;
     private TextView mTvDelect;
 
 
     public static PhotoPagerDialog getInstance(ArrayList paths, PhotoPagerCallback callBack) {
+        return getInstance(paths,0,callBack);
+    }
+
+    public static PhotoPagerDialog getInstance(ArrayList paths,int showIndex, PhotoPagerCallback callBack) {
         mCallBack = callBack;
         mPaths = paths;
+        mIndex = showIndex;
         PhotoPagerDialog photoPagerDialog = new PhotoPagerDialog();
         return photoPagerDialog;
     }
-
 
 //    public abstract void convertView(ViewHolder holder, PhotoPagerDialog dialog);
 
@@ -118,6 +123,7 @@ public class PhotoPagerDialog<T> extends DialogFragment {
 
         mPagerAdapter = new PhotoAdapter<>(Glide.with(getActivity()), mPaths, mCallBack);
         mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setCurrentItem(mIndex);
     }
 
     @Override

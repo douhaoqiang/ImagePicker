@@ -26,6 +26,8 @@ import com.dhq.picker.PhotoPickerActivity;
 import com.dhq.picker.R;
 import com.dhq.picker.adapter.PhotoGridAdapter;
 import com.dhq.picker.adapter.PopupDirectoryListAdapter;
+import com.dhq.picker.dialog.PhotoPagerCallback;
+import com.dhq.picker.dialog.PhotoPagerDialog;
 import com.dhq.picker.entity.Photo;
 import com.dhq.picker.entity.PhotoDirectory;
 import com.dhq.picker.event.OnPhotoClickListener;
@@ -164,11 +166,24 @@ public class PhotoPickerFragment extends Fragment {
 
                 int[] screenLocation = new int[2];
                 v.getLocationOnScreen(screenLocation);
-                ImagePagerFragment imagePagerFragment =
-                        ImagePagerFragment.newInstance(photos, index, screenLocation, v.getWidth(),
-                                v.getHeight());
 
-                ((PhotoPickerActivity) getActivity()).addImagePagerFragment(imagePagerFragment);
+                PhotoPagerDialog.getInstance(photos,index, new PhotoPagerCallback<String>() {
+                    @Override
+                    public String getImagePath(String data) {
+                        return data;
+                    }
+
+                    @Override
+                    public void removeImage(int position) {
+
+                    }
+                }).show(getActivity().getSupportFragmentManager());
+//
+//                ImagePagerFragment imagePagerFragment =
+//                        ImagePagerFragment.newInstance(photos, index, screenLocation, v.getWidth(),
+//                                v.getHeight());
+//
+//                ((PhotoPickerActivity) getActivity()).addImagePagerFragment(imagePagerFragment);
             }
         });
 
