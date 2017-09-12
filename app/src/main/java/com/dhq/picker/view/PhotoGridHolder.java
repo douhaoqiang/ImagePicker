@@ -9,7 +9,7 @@ import android.view.View;
  * Created by douhaoqiang on 2016/9/7.
  */
 
-public class RecycleViewBaseHolder extends RecyclerView.ViewHolder {
+public class PhotoGridHolder extends RecyclerView.ViewHolder {
     /**
      * save view ids
      */
@@ -17,7 +17,7 @@ public class RecycleViewBaseHolder extends RecyclerView.ViewHolder {
 
     private View rootView;
 
-    public RecycleViewBaseHolder(View itemView) {
+    public PhotoGridHolder(View itemView) {
         super(itemView);
         this.mSparseArray = new SparseArray<>();
         this.rootView = itemView;

@@ -19,8 +19,18 @@
 
     <ImageView
         android:id="@+id/demo_select_pic_iv"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:background="@color/__picker_item_photo_border_selected" />
+
+
+    <com.dhq.picker.view.MulImageView
+        android:id="@+id/mv_grid_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.dhq.picker.view.MulImageView>
+
+
 
 </LinearLayout>

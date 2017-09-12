@@ -8,9 +8,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.dhq.picker.dialog.PhotoPagerCallback;
 import com.dhq.picker.dialog.PhotoPagerDialog;
 import com.dhq.picker.pickutil.ImagePickUtils;
+import com.dhq.picker.view.MulImageView;
+import com.dhq.picker.view.PhotoGridAdapter;
 import com.dhq.pickerdemo.R;
 
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private ImageView imageView;
+    private MulImageView mulImgView;
 
 
     public static String[] imgUrls = {
@@ -30,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
             "http://ws3.cdn.caijing.com.cn/2013-10-08/113380221.jpg",
             "http://www.yoka.com/dna/pics/ba1caeb9/97/d35cce9cdb3b11bac9.jpg"
     };
+    private PhotoGridAdapter<String> photoGridAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         imageView = (ImageView) findViewById(R.id.demo_select_pic_iv);
+        mulImgView = (MulImageView) findViewById(R.id.mv_grid_image);
 
         findViewById(R.id.demo_select_pic_btn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,15 +71,44 @@ public class MainActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.demo_pager_pic_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ArrayList<String> list = new ArrayList<String>();
+                for (String imgUrl : imgUrls) {
+                    list.add(imgUrl);
+                }
+
+                PhotoPagerDialog.getInstance(list, new PhotoPagerCallback<String>() {
+                    @Override
+                    public String getImagePath(String data) {
+                        return data;
+                    }
+
+                    @Override
+                    public void removeImage(int position) {
+
+                    }
+                }).show(getSupportFragmentManager());
+
+            }
+        });
+
+        initListener();
+
+    }
+
+
+    private void initListener() {
+
+        photoGridAdapter = new PhotoGridAdapter<String>(3) {
+            @Override
+            public void convert(ImageView imageView, String item, final int position) {
+                Glide.with(MainActivity.this).load(item).into(imageView);
+                imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        ArrayList<String> list = new ArrayList<String>();
-                        for (String imgUrl : imgUrls) {
-                            list.add(imgUrl);
-                        }
-
-                        PhotoPagerDialog.getInstance(list, new PhotoPagerCallback<String>() {
+                        PhotoPagerDialog.getInstance(photoGridAdapter.getDatas(),position, new PhotoPagerCallback<String>() {
                             @Override
                             public String getImagePath(String data) {
                                 return data;
@@ -84,11 +119,30 @@ public class MainActivity extends AppCompatActivity {
 
                             }
                         }).show(getSupportFragmentManager());
-
                     }
                 });
 
 
+            }
+
+            @Override
+            public void addImg(ImageView imageView, int position) {
+                imageView.setImageResource(R.drawable.__picker_camera);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ImagePickUtils.pickPic(MainActivity.this, new ImagePickUtils.PickSingleCallBack() {
+
+                            @Override
+                            public void result(String imgPath, Bitmap picBitmap) {
+                                mulImgView.addData(imgPath);
+                            }
+                        });
+                    }
+                });
+            }
+        };
+        mulImgView.setAdapter(photoGridAdapter);
     }
 
 

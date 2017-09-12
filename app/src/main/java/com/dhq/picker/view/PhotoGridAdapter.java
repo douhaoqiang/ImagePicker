@@ -4,6 +4,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.dhq.pickerdemo.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,17 +16,20 @@ import java.util.Collections;
  * Created by douhaoqiang on 2016/9/6.
  */
 
-public abstract class RecycleViewBaseAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
+public abstract class PhotoGridAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<T> datas = new ArrayList<>();
-    private int layoutId;
+    private int maxCount;//最大数量
+    private boolean isCanAdd = true;//表示是否可以添加图片
 
-    /**
-     * @param itemId 单个item的布局文件id
-     */
-    public RecycleViewBaseAdapter(int itemId) {
-        this.layoutId = itemId;
+
+    public PhotoGridAdapter(int maxCount) {
+        this.maxCount = maxCount;
+    }
+
+
+    public ArrayList<T> getDatas(){
+        return datas;
     }
 
     /**
@@ -90,22 +96,51 @@ public abstract class RecycleViewBaseAdapter<T> extends RecyclerView.Adapter<Rec
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_mult_view, parent, false);
 
-        return new RecycleViewBaseHolder(view);
+        return new PhotoGridHolder(view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        convert((RecycleViewBaseHolder) holder, datas.get(position), position);
+        ImageView imageView = (ImageView) ((PhotoGridHolder) holder).getRootView();
+        imageView.setOnClickListener(null);
+        if (isCanAdd && position == datas.size()) {
+            addImg(imageView, position);
+        } else {
+            convert(imageView, datas.get(position), position);
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return datas.size();
+        int size = datas.size();
+        if (size >= maxCount) {
+            isCanAdd = false;
+            return maxCount;
+        } else {
+            isCanAdd = true;
+            return datas.size()+1;
+        }
     }
 
 
-    public abstract void convert(RecycleViewBaseHolder holder, T item, int position);
+    /**
+     * 显示有图片的位置
+     *
+     * @param imageView
+     * @param item
+     * @param position
+     */
+    public abstract void convert(ImageView imageView, T item, int position);
+
+    /**
+     * 显示添加图片位置
+     *
+     * @param imageView
+     * @param position
+     */
+    public abstract void addImg(ImageView imageView, int position);
 
 }
