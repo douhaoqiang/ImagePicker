@@ -4,28 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/demo_select_pic_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="选择图片" />
-
-    <Button
-        android:id="@+id/demo_pager_pic_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="浏览图片" />
-
-
-    <ImageView
-        android:id="@+id/demo_select_pic_iv"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:background="@color/__picker_item_photo_border_selected" />
-
-
     <com.dhq.picker.view.MulImageView
         android:id="@+id/mv_grid_image"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

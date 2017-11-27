@@ -41,11 +41,11 @@ public class PhotoPagerDialog<T> extends DialogFragment {
     private TextView mTvDelect;
 
 
-    public static PhotoPagerDialog getInstance(ArrayList paths, PhotoPagerCallback callBack) {
+    public static PhotoPagerDialog getInstance(List paths, PhotoPagerCallback callBack) {
         return getInstance(paths,0,callBack);
     }
 
-    public static PhotoPagerDialog getInstance(ArrayList paths,int showIndex, PhotoPagerCallback callBack) {
+    public static PhotoPagerDialog getInstance(List paths,int showIndex, PhotoPagerCallback callBack) {
         mCallBack = callBack;
         mPaths = paths;
         mIndex = showIndex;

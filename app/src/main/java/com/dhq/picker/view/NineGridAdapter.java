@@ -10,25 +10,33 @@ import com.dhq.pickerdemo.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * DESC RecycleView 的公用adapter
  * Created by douhaoqiang on 2016/9/6.
  */
 
-public abstract class PhotoGridAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class NineGridAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ArrayList<T> datas = new ArrayList<>();
+    private List<T> datas = new ArrayList<>();
     private int maxCount;//最大数量
     private boolean isCanAdd = true;//表示是否可以添加图片
+    private MulImageView.NineListener mNineListener;//九宫格数据监听
 
 
-    public PhotoGridAdapter(int maxCount) {
+    public NineGridAdapter(int maxCount, MulImageView.NineListener nineListener) {
         this.maxCount = maxCount;
+        this.mNineListener = nineListener;
+    }
+
+    public void setCanAdd(boolean isCanAdd) {
+        this.isCanAdd = isCanAdd;
+        notifyDataSetChanged();
     }
 
 
-    public ArrayList<T> getDatas(){
+    public List<T> getDatas() {
         return datas;
     }
 
@@ -37,7 +45,7 @@ public abstract class PhotoGridAdapter<T> extends RecyclerView.Adapter<RecyclerV
      *
      * @param datas 列表数据
      */
-    public void setDatas(ArrayList<T> datas) {
+    public void setDatas(List<T> datas) {
         this.datas = datas;
         notifyDataSetChanged();
     }
@@ -67,7 +75,7 @@ public abstract class PhotoGridAdapter<T> extends RecyclerView.Adapter<RecyclerV
      *
      * @param datas 要添加的多个数据
      */
-    public void addDatas(ArrayList<T> datas) {
+    public void addDatas(List<T> datas) {
         this.datas.addAll(datas);
         notifyDataSetChanged();
     }
@@ -104,11 +112,13 @@ public abstract class PhotoGridAdapter<T> extends RecyclerView.Adapter<RecyclerV
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ImageView imageView = (ImageView) ((PhotoGridHolder) holder).getRootView();
+
         imageView.setOnClickListener(null);
+        imageView.setImageResource(R.mipmap.image_add_g);
         if (isCanAdd && position == datas.size()) {
-            addImg(imageView, position);
+            mNineListener.addImg(imageView, position);
         } else {
-            convert(imageView, datas.get(position), position);
+            mNineListener.convert(imageView, datas.get(position), position);
         }
 
     }
@@ -120,27 +130,12 @@ public abstract class PhotoGridAdapter<T> extends RecyclerView.Adapter<RecyclerV
             isCanAdd = false;
             return maxCount;
         } else {
-            isCanAdd = true;
-            return datas.size()+1;
+            if (!isCanAdd) {
+                return datas.size();
+            } else {
+                return datas.size() + 1;
+            }
         }
     }
-
-
-    /**
-     * 显示有图片的位置
-     *
-     * @param imageView
-     * @param item
-     * @param position
-     */
-    public abstract void convert(ImageView imageView, T item, int position);
-
-    /**
-     * 显示添加图片位置
-     *
-     * @param imageView
-     * @param position
-     */
-    public abstract void addImg(ImageView imageView, int position);
 
 }
