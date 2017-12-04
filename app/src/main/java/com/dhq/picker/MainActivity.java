@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide;
 import com.dhq.picker.dialog.PhotoPagerCallback;
 import com.dhq.picker.dialog.PhotoPagerDialog;
 import com.dhq.picker.pickutil.ImagePickUtils;
-import com.dhq.picker.view.MulImageView;
+import com.dhq.picker.view.GridImageView;
 import com.dhq.pickerdemo.R;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
-    private MulImageView mulImgView;
+    private GridImageView gridImgView;
 
 
     @Override
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        mulImgView = (MulImageView) findViewById(R.id.mv_grid_image);
+        gridImgView = (GridImageView) findViewById(R.id.mv_grid_image);
 
         initListener();
 
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private void initListener() {
 
 
-        mulImgView.setListener(3, new MulImageView.NineListener<String>() {
+        gridImgView.setListener(9, new GridImageView.ImageListener<String>() {
 
             @Override
             public void convert(ImageView imageView, String item, final int position) {
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        PhotoPagerDialog.getInstance(mulImgView.getDatas(), position, new PhotoPagerCallback<String>() {
+                        PhotoPagerDialog.getInstance(gridImgView.getDatas(), position, new PhotoPagerCallback<String>() {
                             @Override
                             public String getImagePath(String data) {
                                 return data;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
                             @Override
                             public void result(List<String> pics) {
-                                mulImgView.setDatas(pics);
+                                gridImgView.setDatas(pics);
                             }
 
                         });
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //                            @Override
 //                            public void result(String imgPath, Bitmap picBitmap) {
-//                                mulImgView.addData(imgPath);
+//                                gridImgView.addData(imgPath);
 //                            }
 //                        });
                     }

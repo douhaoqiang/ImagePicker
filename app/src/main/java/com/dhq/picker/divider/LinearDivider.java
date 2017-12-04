@@ -29,8 +29,8 @@ public class LinearDivider extends DividerFactory {
 
     public LinearDivider(Builder builder) {
         this.mDivider = builder.getDrawable();
-        this.mStrokeWidth = builder.getHorizontalSpace();
-        this.mStrokeHeight = builder.getVerticalSpace();
+        this.mStrokeWidth = builder.getColumnSpace();
+        this.mStrokeHeight = builder.getRowSpace();
         this.mHideLastDivider = builder.isHideLastDivider();
     }
 

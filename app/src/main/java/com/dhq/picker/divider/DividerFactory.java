@@ -54,7 +54,7 @@ public abstract class DividerFactory extends RecyclerView.ItemDecoration {
 
     public static Builder builder(@Nullable Context context) {
         if (context == null) {
-            throw new NullPointerException("context = null");
+            throw new NullPointerException("Context is null");
         }
         return new Builder(context);
     }
@@ -72,8 +72,8 @@ public abstract class DividerFactory extends RecyclerView.ItemDecoration {
 
         private final Context context;
         private Drawable drawable;
-        private int horizontalSpace = 0;
-        private int verticalSpace = 0;
+        private int columnSpace = 0;
+        private int rowSpace = 0;
         private boolean hideLastDivider = true;
 
         private Builder(Context context) {
@@ -90,19 +90,36 @@ public abstract class DividerFactory extends RecyclerView.ItemDecoration {
 
         public Builder setSpaceColor(@ColorRes int id, @DimenRes int strokeWidth) {
             this.drawable = new ColorDrawable(ContextCompat.getColor(context, id));
-            this.horizontalSpace = this.verticalSpace = context.getResources().getDimensionPixelSize(strokeWidth);
+            this.columnSpace = this.rowSpace = context.getResources().getDimensionPixelSize(strokeWidth);
             return this;
         }
 
-        public Builder setHorizontalColor(@ColorRes int id, @DimenRes int strokeWidth) {
-            this.drawable = new ColorDrawable(ContextCompat.getColor(context, id));
-            this.horizontalSpace = context.getResources().getDimensionPixelSize(strokeWidth);
+//        public Builder setSpaceColor(@ColorRes int id) {
+//            this.drawable = new ColorDrawable(ContextCompat.getColor(context, id));
+//            return this;
+//        }
+//
+//        public Builder setColumnSpace(@DimenRes int strokeWidth) {
+//            this.columnSpace = context.getResources().getDimensionPixelSize(strokeWidth);
+//            return this;
+//        }
+//
+//        public Builder setRowSpace(@DimenRes int strokeWidth) {
+//            this.rowSpace = context.getResources().getDimensionPixelSize(strokeWidth);
+//            return this;
+//        }
+        public Builder setSpaceColor( int id) {
+            this.drawable = new ColorDrawable(id);
             return this;
         }
 
-        public Builder setVerticalColor(@ColorRes int id, @DimenRes int strokeWidth) {
-            this.drawable = new ColorDrawable(ContextCompat.getColor(context, id));
-            this.verticalSpace = context.getResources().getDimensionPixelSize(strokeWidth);
+        public Builder setColumnSpace(int strokeWidth) {
+            this.columnSpace = strokeWidth;
+            return this;
+        }
+
+        public Builder setRowSpace(int strokeWidth) {
+            this.rowSpace = strokeWidth;
             return this;
         }
 
@@ -119,22 +136,12 @@ public abstract class DividerFactory extends RecyclerView.ItemDecoration {
             return this;
         }
 
-        public int getHorizontalSpace() {
-            return horizontalSpace;
+        public int getColumnSpace() {
+            return columnSpace;
         }
 
-        public Builder setHorizontalSpace(int horizontalSpace) {
-            this.horizontalSpace = horizontalSpace;
-            return this;
-        }
-
-        public int getVerticalSpace() {
-            return verticalSpace;
-        }
-
-        public Builder setVerticalSpace(int verticalSpace) {
-            this.verticalSpace = verticalSpace;
-            return this;
+        public int getRowSpace() {
+            return rowSpace;
         }
 
         public boolean isHideLastDivider() {

@@ -22,10 +22,10 @@ public class NineGridAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<T> datas = new ArrayList<>();
     private int maxCount;//最大数量
     private boolean isCanAdd = true;//表示是否可以添加图片
-    private MulImageView.NineListener mNineListener;//九宫格数据监听
+    private GridImageView.ImageListener mNineListener;//九宫格数据监听
 
 
-    public NineGridAdapter(int maxCount, MulImageView.NineListener nineListener) {
+    public NineGridAdapter(int maxCount, GridImageView.ImageListener nineListener) {
         this.maxCount = maxCount;
         this.mNineListener = nineListener;
     }

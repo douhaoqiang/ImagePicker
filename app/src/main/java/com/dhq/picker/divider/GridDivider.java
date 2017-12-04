@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -17,15 +18,15 @@ public class GridDivider extends DividerFactory {
 
     private final Rect mBounds = new Rect();
     private final Drawable mDivider;
-    private final int mStrokeWidth;
-    private final int mStrokeHeight;
+    private final int mColumnSpace;
+    private final int mRowSpace;
     private final boolean mHideRoundDivider;//是否显示四周分割线
     private int mSpanCount = 1;
 
     public GridDivider(Builder builder) {
         this.mDivider = builder.getDrawable();
-        this.mStrokeWidth = builder.getHorizontalSpace();
-        this.mStrokeHeight = builder.getVerticalSpace();
+        this.mColumnSpace = builder.getColumnSpace();
+        this.mRowSpace = builder.getRowSpace();
         this.mHideRoundDivider = builder.isHideLastDivider();
 //        this.mHideRoundDivider = false;
     }
@@ -63,6 +64,7 @@ public class GridDivider extends DividerFactory {
         int top = getTopSpaceWidth(position);
         int right = getRightSpaceWidth(position);
         int bottom = getBottomSpaceWidth(childCount, position);
+        Log.e("calculateItemOffsets",position+"==:"+left+"--"+top+"--"+right+"--"+bottom);
         outRect.set(left,
                 top,
                 right,
@@ -125,21 +127,21 @@ public class GridDivider extends DividerFactory {
         if (position % mSpanCount == 0) {
             return getEdgeWidth();
         }
-        return 0;
+        return getColumnSpace()/2;
     }
 
     private int getTopSpaceWidth(int position) {
         if (position < mSpanCount) {
             return getEdgeHeight();
         }
-        return 0;
+        return getRowSpace()/2;
     }
 
     private int getRightSpaceWidth(int position) {
         if (position % mSpanCount == mSpanCount - 1) {
             return getEdgeWidth();
         }
-        return getSpaceWidth();
+        return getColumnSpace()/2;
     }
 
     private int getBottomSpaceWidth(int totalCount, int position) {
@@ -148,7 +150,7 @@ public class GridDivider extends DividerFactory {
         if (totalRow == currentRow) {
             return getEdgeWidth();
         }
-        return getSpaceHeight();
+        return getRowSpace()/2;
     }
 
 
@@ -157,10 +159,10 @@ public class GridDivider extends DividerFactory {
      *
      * @return
      */
-    private int getSpaceWidth() {
+    private int getColumnSpace() {
 
         if (mDivider instanceof ColorDrawable) {
-            return mStrokeWidth;
+            return mColumnSpace;
         }
         return mDivider.getIntrinsicWidth();
     }
@@ -170,10 +172,10 @@ public class GridDivider extends DividerFactory {
      *
      * @return
      */
-    private int getSpaceHeight() {
+    private int getRowSpace() {
 
         if (mDivider instanceof ColorDrawable) {
-            return mStrokeHeight;
+            return mRowSpace;
         }
         return mDivider.getIntrinsicHeight();
     }
@@ -188,7 +190,7 @@ public class GridDivider extends DividerFactory {
             return 0;
         }
 
-        return getSpaceWidth();
+        return getColumnSpace();
     }
 
     /**
@@ -201,7 +203,7 @@ public class GridDivider extends DividerFactory {
         if (mHideRoundDivider) {
             return 0;
         }
-        return getSpaceHeight();
+        return getRowSpace();
     }
 
 }
