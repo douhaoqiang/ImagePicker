@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="GridImageView">
-        <!--图片的最大数量-->
-        <attr name="gridImageMax" format="integer" />
-        <!--图片的列数-->
-        <attr name="gridImageColumn" format="integer" />
-        <!--图片的列间距-->
-        <attr name="gridImageColumnSpace" format="dimension|reference" />
-        <!--图片的行间距-->
-        <attr name="gridImageRowSpace" format="dimension|reference" />
-        <!--图片的间距颜色-->
-        <attr name="gridImageSpaceColor" format="color|reference" />
-        <!--是否显示四周边框间距-->
-        <attr name="gridImageShowEdge" format="boolean" />
-    </declare-styleable>
+    <!--<declare-styleable name="NineImageView">-->
+        <!--&lt;!&ndash;图片的最大数量&ndash;&gt;-->
+        <!--<attr name="gridImageMax" format="integer" />-->
+        <!--&lt;!&ndash;图片的列数&ndash;&gt;-->
+        <!--<attr name="gridImageColumn" format="integer" />-->
+        <!--&lt;!&ndash;图片的列间距&ndash;&gt;-->
+        <!--<attr name="gridImageColumnSpace" format="dimension|reference" />-->
+        <!--&lt;!&ndash;图片的行间距&ndash;&gt;-->
+        <!--<attr name="gridImageRowSpace" format="dimension|reference" />-->
+        <!--&lt;!&ndash;图片的间距颜色&ndash;&gt;-->
+        <!--<attr name="gridImageSpaceColor" format="color|reference" />-->
+        <!--&lt;!&ndash;是否显示四周边框间距&ndash;&gt;-->
+        <!--<attr name="gridImageShowEdge" format="boolean" />-->
+    <!--</declare-styleable>-->
 
 
 </resources>

@@ -12,7 +12,7 @@ import com.dhq.picker.dialog.PhotoPagerCallback;
 import com.dhq.picker.dialog.PhotoPagerDialog;
 import com.dhq.picker.pickutil.ImagePickUtils;
 import com.dhq.picker.view.GridAdapter;
-import com.dhq.picker.view.GridImageView;
+import com.dhq.picker.view.NineImageView;
 import com.dhq.pickerdemo.R;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
-    private GridImageView gridImgView;
+    private NineImageView gridImgView;
     private GridAdapter<String> stringGridAdapter;
 
     @Override
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        gridImgView = (GridImageView) findViewById(R.id.mv_grid_image);
+        gridImgView = (NineImageView) findViewById(R.id.mv_grid_image);
 
         initListener();
 
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private void initListener() {
 
 
-        stringGridAdapter = new GridAdapter<>(9, new GridImageView.ImageListener() {
+        stringGridAdapter = new GridAdapter<>(9, new NineImageView.ImageListener() {
             @Override
             public void convert(ImageView imageView, Object item, final int position) {
                 Glide.with(MainActivity.this).load(item).into(imageView);

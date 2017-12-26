@@ -5,20 +5,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.dhq.picker.view.GridImageView
+    <com.dhq.picker.view.NineImageView
         android:id="@+id/mv_grid_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:background="#000000"
-        app:gridImageColumn="3"
-        app:gridImageColumnSpace="10dp"
-        app:gridImageMax="9"
-        app:gridImageRowSpace="10dp"
-        app:gridImageShowEdge="true">
+        android:layout_marginRight="50dp">
 
-    </com.dhq.picker.view.GridImageView>
+    </com.dhq.picker.view.NineImageView>
 
 
 </LinearLayout>

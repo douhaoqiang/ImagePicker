@@ -94,34 +94,26 @@ public abstract class DividerFactory extends RecyclerView.ItemDecoration {
             return this;
         }
 
-//        public Builder setSpaceColor(@ColorRes int id) {
-//            this.drawable = new ColorDrawable(ContextCompat.getColor(context, id));
-//            return this;
-//        }
-//
-//        public Builder setColumnSpace(@DimenRes int strokeWidth) {
-//            this.columnSpace = context.getResources().getDimensionPixelSize(strokeWidth);
-//            return this;
-//        }
-//
-//        public Builder setRowSpace(@DimenRes int strokeWidth) {
-//            this.rowSpace = context.getResources().getDimensionPixelSize(strokeWidth);
-//            return this;
-//        }
-        public Builder setSpaceColor( int id) {
-            this.drawable = new ColorDrawable(id);
+        public Builder setSpaceColor(@ColorRes int id) {
+            this.drawable = new ColorDrawable(ContextCompat.getColor(context, id));
             return this;
         }
 
-        public Builder setColumnSpace(int strokeWidth) {
-            this.columnSpace = strokeWidth;
+        public Builder setColumnSpace(@DimenRes int strokeWidth) {
+            this.columnSpace = context.getResources().getDimensionPixelSize(strokeWidth);
             return this;
         }
 
-        public Builder setRowSpace(int strokeWidth) {
-            this.rowSpace = strokeWidth;
+        public Builder setRowSpace(@DimenRes int strokeWidth) {
+            this.rowSpace = context.getResources().getDimensionPixelSize(strokeWidth);
             return this;
         }
+
+        public Builder setSpace(@DimenRes int strokeWidth) {
+            this.columnSpace = this.rowSpace = context.getResources().getDimensionPixelSize(strokeWidth);
+            return this;
+        }
+
 
         public Context getContext() {
             return context;

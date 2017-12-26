@@ -1,8 +1,6 @@
 package com.dhq.picker.view;
 
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -20,67 +18,36 @@ import java.util.List;
  * Created by douhaoqiang on 2017/9/6.
  */
 
-public class GridImageView<T> extends LinearLayout {
+public class NineImageView<T> extends LinearLayout {
 
     private RecyclerView mRecyclerView;
     private GridAdapter<T> mAdapter;
-    private int mMaxCount;//最大数量
-    private int mColumnCount;//图片显示列数
-    private int mColumnSpace;//列间距
-    private int mRowSpace;//行间距
-    private int mSpaceColor;//间距颜色
-    private boolean mIsHindEdge;//是否显示四周边界线
+    private int mColumnCount = 3;//图片显示列数
 
-    public GridImageView(Context context) {
+    public NineImageView(Context context) {
         this(context, null);
     }
 
-    public GridImageView(Context context, AttributeSet attrs) {
+    public NineImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public GridImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public NineImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initAttrs(attrs);
         initView(context);
     }
 
-    private void initAttrs(AttributeSet attrs) {
-
-        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.GridImageView);
-        if (typedArray != null) {
-            mMaxCount = typedArray.getInteger(R.styleable.GridImageView_gridImageMax, -1);
-            //列数默认3列
-            mColumnCount = typedArray.getInteger(R.styleable.GridImageView_gridImageColumn, 4);
-            mColumnSpace = typedArray.getDimensionPixelSize(R.styleable.GridImageView_gridImageColumnSpace, 0);
-            mRowSpace = typedArray.getDimensionPixelSize(R.styleable.GridImageView_gridImageRowSpace, 0);
-            //默认间隙颜色为透明
-            mSpaceColor = typedArray.getColor(R.styleable.GridImageView_gridImageSpaceColor, ContextCompat.getColor(getContext(), android.R.color.transparent));
-            mIsHindEdge = typedArray.getBoolean(R.styleable.GridImageView_gridImageShowEdge, false);
-//            mSpaceColor=ContextCompat.getColor(getContext(),R.color.divider2);
-        }
-        typedArray.recycle();
-    }
 
     private void initView(Context context) {
-//        LayoutInflater.from(context).inflate(R.layout.multi_image_view, this, true);
         inflate(context, R.layout.multi_image_view, this);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_mul_img);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), mColumnCount));
-//        mRecyclerView.setLayoutManager(new MyGridManger());
 
         DividerFactory.Builder builder = DividerFactory.builder(context)
-                .setSpaceColor(mSpaceColor)
-                .setHideLastDivider(mIsHindEdge);
-        if (mColumnSpace != -1) {
-            builder.setColumnSpace(mColumnSpace);
-        }
-        if (mRowSpace != -1) {
-            builder.setRowSpace(mRowSpace);
-        }
+                .setSpaceColor(android.R.color.transparent)
+                .setSpace(R.dimen.divider_stroke_width);
         GridDivider itemDecoration = builder.buildGridDivider();
-
         itemDecoration.addTo(mRecyclerView);
 
     }
@@ -132,7 +99,7 @@ public class GridImageView<T> extends LinearLayout {
          * @param position  位置
          * @param count     现在图片数量
          */
-        void addImg(ImageView imageView, int position,int count);
+        void addImg(ImageView imageView, int position, int count);
     }
 
 

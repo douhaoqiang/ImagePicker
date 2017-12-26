@@ -22,10 +22,10 @@ public class GridAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private List<T> datas = new ArrayList<>();
     private int maxCount;//最大数量
     private boolean isCanAdd = true;//表示是否可以添加图片
-    private GridImageView.ImageListener mNineListener;//九宫格数据监听
+    private NineImageView.ImageListener mNineListener;//九宫格数据监听
 
 
-    public GridAdapter(int maxCount, GridImageView.ImageListener nineListener) {
+    public GridAdapter(int maxCount, NineImageView.ImageListener nineListener) {
         this.maxCount = maxCount;
         this.mNineListener = nineListener;
     }
