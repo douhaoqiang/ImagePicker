@@ -23,7 +23,7 @@ import java.util.List;
 public class GridImageView<T> extends LinearLayout {
 
     private RecyclerView mRecyclerView;
-    private NineGridAdapter<T> mAdapter;
+    private GridAdapter<T> mAdapter;
     private int mMaxCount;//最大数量
     private int mColumnCount;//图片显示列数
     private int mColumnSpace;//列间距
@@ -51,13 +51,13 @@ public class GridImageView<T> extends LinearLayout {
         if (typedArray != null) {
             mMaxCount = typedArray.getInteger(R.styleable.GridImageView_gridImageMax, -1);
             //列数默认3列
-            mColumnCount = typedArray.getInteger(R.styleable.GridImageView_gridImageColumn, 3);
+            mColumnCount = typedArray.getInteger(R.styleable.GridImageView_gridImageColumn, 4);
             mColumnSpace = typedArray.getDimensionPixelSize(R.styleable.GridImageView_gridImageColumnSpace, 0);
             mRowSpace = typedArray.getDimensionPixelSize(R.styleable.GridImageView_gridImageRowSpace, 0);
             //默认间隙颜色为透明
             mSpaceColor = typedArray.getColor(R.styleable.GridImageView_gridImageSpaceColor, ContextCompat.getColor(getContext(), android.R.color.transparent));
             mIsHindEdge = typedArray.getBoolean(R.styleable.GridImageView_gridImageShowEdge, false);
-            mSpaceColor=ContextCompat.getColor(getContext(),R.color.divider2);
+//            mSpaceColor=ContextCompat.getColor(getContext(),R.color.divider2);
         }
         typedArray.recycle();
     }
@@ -68,6 +68,7 @@ public class GridImageView<T> extends LinearLayout {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_mul_img);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), mColumnCount));
+//        mRecyclerView.setLayoutManager(new MyGridManger());
 
         DividerFactory.Builder builder = DividerFactory.builder(context)
                 .setSpaceColor(mSpaceColor)
@@ -87,13 +88,10 @@ public class GridImageView<T> extends LinearLayout {
 
     /**
      * 设置显示适配器
-     *
-     * @param maxCount 图片显示的最大数量
-     * @param listener 数据处理监听器
      */
-    public void setListener(int maxCount, ImageListener listener) {
-        mAdapter = new NineGridAdapter<T>(maxCount, listener);
-        mRecyclerView.setAdapter(mAdapter);
+    public void setAdapter(GridAdapter gridAdapter) {
+        this.mAdapter = gridAdapter;
+        mRecyclerView.setAdapter(gridAdapter);
     }
 
 
@@ -130,10 +128,11 @@ public class GridImageView<T> extends LinearLayout {
         /**
          * 显示添加图片位置
          *
-         * @param imageView
-         * @param position
+         * @param imageView 添加图片
+         * @param position  位置
+         * @param count     现在图片数量
          */
-        void addImg(ImageView imageView, int position);
+        void addImg(ImageView imageView, int position,int count);
     }
 
 

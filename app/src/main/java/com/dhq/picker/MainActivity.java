@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.dhq.picker.dialog.PhotoPagerCallback;
 import com.dhq.picker.dialog.PhotoPagerDialog;
 import com.dhq.picker.pickutil.ImagePickUtils;
+import com.dhq.picker.view.GridAdapter;
 import com.dhq.picker.view.GridImageView;
 import com.dhq.pickerdemo.R;
 
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private GridImageView gridImgView;
-
+    private GridAdapter<String> stringGridAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,10 +39,9 @@ public class MainActivity extends AppCompatActivity {
     private void initListener() {
 
 
-        gridImgView.setListener(9, new GridImageView.ImageListener<String>() {
-
+        stringGridAdapter = new GridAdapter<>(9, new GridImageView.ImageListener() {
             @Override
-            public void convert(ImageView imageView, String item, final int position) {
+            public void convert(ImageView imageView, Object item, final int position) {
                 Glide.with(MainActivity.this).load(item).into(imageView);
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -62,32 +62,27 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void addImg(ImageView imageView, int position) {
+            public void addImg(ImageView imageView, int position, int count) {
+                int size = 9 - stringGridAdapter.getDatas().size();
+                ImagePickUtils.pickMulPic(MainActivity.this, size, new ImagePickUtils.PickMulCallBack() {
 
-                imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-
-                        ImagePickUtils.pickMulPic(MainActivity.this, 6, new ImagePickUtils.PickMulCallBack() {
-
-                            @Override
-                            public void result(List<String> pics) {
-                                gridImgView.setDatas(pics);
-                            }
-
-                        });
-
-//                        ImagePickUtils.pickPic(MainActivity.this, new ImagePickUtils.PickSingleCallBack() {
-//
-//                            @Override
-//                            public void result(String imgPath, Bitmap picBitmap) {
-//                                gridImgView.addData(imgPath);
-//                            }
-//                        });
+                    public void result(List<String> pics) {
+                        gridImgView.addDatas(pics);
                     }
+
                 });
+
+//                ImagePickUtils.pickPic(MainActivity.this, new ImagePickUtils.PickSingleCallBack() {
+//
+//                    @Override
+//                    public void result(String imgPath, Bitmap picBitmap) {
+//                        gridImgView.addData(imgPath);
+//                    }
+//                });
             }
         });
+        gridImgView.setAdapter(stringGridAdapter);
 
 
     }

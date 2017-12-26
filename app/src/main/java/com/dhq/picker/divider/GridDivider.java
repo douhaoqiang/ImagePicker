@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -22,6 +21,8 @@ public class GridDivider extends DividerFactory {
     private final int mRowSpace;
     private final boolean mHideRoundDivider;//是否显示四周分割线
     private int mSpanCount = 1;
+    private int mItemWidth;
+    private int mItemHeight;
 
     public GridDivider(Builder builder) {
         this.mDivider = builder.getDrawable();
@@ -53,65 +54,36 @@ public class GridDivider extends DividerFactory {
     public void calculateItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
         mSpanCount = layoutManager.getSpanCount();
-        final int position = getAdapterPosition(view);
-        int childCount = parent.getAdapter().getItemCount();
-        if (mDivider == null && null == getDivider()) {
-            outRect.set(0, 0, 0, 0);
-            return;
+
+        final int position = parent.getChildAdapterPosition(view);
+
+        int column = position % mSpanCount; // item column
+
+        if (mHideRoundDivider) {
+            outRect.left = column * mColumnSpace / mSpanCount; // column * ((1f / spanCount) * spacing)
+            outRect.right = mColumnSpace - (column + 1) * mColumnSpace / mSpanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+            if (position >= mSpanCount) {
+                outRect.top = mColumnSpace; // item top
+            }
+        } else {
+            outRect.left = mColumnSpace - column * mColumnSpace / mSpanCount; // spacing - column * ((1f / spanCount) * spacing)
+            outRect.right = (column + 1) * mColumnSpace / mSpanCount; // (column + 1) * ((1f / spanCount) * spacing)
+
+            if (position < mSpanCount) { // top edge
+                outRect.top = mColumnSpace;
+            }
+            outRect.bottom = mColumnSpace; // item bottom
         }
 
-        int left = getLeftSpaceWidth(position);
-        int top = getTopSpaceWidth(position);
-        int right = getRightSpaceWidth(position);
-        int bottom = getBottomSpaceWidth(childCount, position);
-        Log.e("calculateItemOffsets",position+"==:"+left+"--"+top+"--"+right+"--"+bottom);
-        outRect.set(left,
-                top,
-                right,
-                bottom);
+
     }
 
 
     private void drawSpace(Canvas canvas, RecyclerView parent) {
 
-        GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
-        mSpanCount = layoutManager.getSpanCount();
-        int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-
-            View child = parent.getChildAt(i);
-            int position = getAdapterPosition(child);
-            Drawable leftDrawable = getDivider();
-            leftDrawable.setBounds(child.getLeft() - getLeftSpaceWidth(position),
-                    child.getTop(),
-                    child.getLeft(),
-                    child.getBottom());
-            leftDrawable.draw(canvas);
-
-            Drawable topDrawable = getDivider();
-            topDrawable.setBounds(child.getLeft() - getLeftSpaceWidth(position),
-                    child.getTop() - getTopSpaceWidth(position),
-                    child.getRight() + getRightSpaceWidth(position),
-                    child.getTop());
-            topDrawable.draw(canvas);
-//
-            Drawable rightDrawable = getDivider();
-            rightDrawable.setBounds(child.getRight(),
-                    child.getTop() - getTopSpaceWidth(position),
-                    child.getRight() + getRightSpaceWidth(position),
-                    child.getBottom());
-            rightDrawable.draw(canvas);
-
-            Drawable bottomDrawable = getDivider();
-            bottomDrawable.setBounds(child.getLeft() - getLeftSpaceWidth(position),
-                    child.getBottom(),
-                    child.getRight() + getRightSpaceWidth(position),
-                    child.getBottom() + getBottomSpaceWidth(childCount, position));
-            bottomDrawable.draw(canvas);
-
-        }
 
     }
+
 
     private int getAdapterPosition(View view) {
         return ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewAdapterPosition();
@@ -127,21 +99,21 @@ public class GridDivider extends DividerFactory {
         if (position % mSpanCount == 0) {
             return getEdgeWidth();
         }
-        return getColumnSpace()/2;
+        return getColumnSpace() / 2;
     }
 
     private int getTopSpaceWidth(int position) {
         if (position < mSpanCount) {
             return getEdgeHeight();
         }
-        return getRowSpace()/2;
+        return getRowSpace() / 2;
     }
 
     private int getRightSpaceWidth(int position) {
         if (position % mSpanCount == mSpanCount - 1) {
             return getEdgeWidth();
         }
-        return getColumnSpace()/2;
+        return getColumnSpace() / 2;
     }
 
     private int getBottomSpaceWidth(int totalCount, int position) {
@@ -150,7 +122,7 @@ public class GridDivider extends DividerFactory {
         if (totalRow == currentRow) {
             return getEdgeWidth();
         }
-        return getRowSpace()/2;
+        return getRowSpace() / 2;
     }
 
 

@@ -17,7 +17,7 @@ import java.util.List;
  * Created by douhaoqiang on 2016/9/6.
  */
 
-public class NineGridAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class GridAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<T> datas = new ArrayList<>();
     private int maxCount;//最大数量
@@ -25,7 +25,7 @@ public class NineGridAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHo
     private GridImageView.ImageListener mNineListener;//九宫格数据监听
 
 
-    public NineGridAdapter(int maxCount, GridImageView.ImageListener nineListener) {
+    public GridAdapter(int maxCount, GridImageView.ImageListener nineListener) {
         this.maxCount = maxCount;
         this.mNineListener = nineListener;
     }
@@ -110,13 +110,18 @@ public class NineGridAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ImageView imageView = (ImageView) ((PhotoGridHolder) holder).getRootView();
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        final ImageView imageView = (ImageView) ((PhotoGridHolder) holder).getRootView();
 
         imageView.setOnClickListener(null);
-        imageView.setImageResource(R.mipmap.image_add_g);
         if (isCanAdd && position == datas.size()) {
-            mNineListener.addImg(imageView, position);
+            imageView.setImageResource(R.mipmap.image_add_g);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mNineListener.addImg(imageView, position, datas.size());
+                }
+            });
         } else {
             mNineListener.convert(imageView, datas.get(position), position);
         }
