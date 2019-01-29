@@ -25,7 +25,7 @@ public class CropUtils {
      */
     public static void startCropActivity(Activity activity, @NonNull Uri uri) {
 
-        startCropActivity(activity, uri, false);
+        startCropActivity(activity, uri, true);
     }
 
     /**

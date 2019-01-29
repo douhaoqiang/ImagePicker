@@ -4,21 +4,14 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -62,15 +55,11 @@ public class MyUCropActivity extends AppCompatActivity {
 
     private String mToolbarTitle;
 
-    // Enables dynamic coloring
-    private int mToolbarColor;
-    private int mStatusBarColor;
-    private int mToolbarWidgetColor;
     private int mLogoColor;
 
-    private boolean mShowLoader = true;
-
     private UCropView mUCropView;
+    private TextView toolbar_crop;
+    private ImageView iv_toolbar_back;
     private GestureCropImageView mGestureCropImageView;
     private OverlayView mOverlayView;
     private View mBlockingView;
@@ -90,53 +79,21 @@ public class MyUCropActivity extends AppCompatActivity {
         setImageData(intent);
         setInitialState();
         addBlockingView();
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        getMenuInflater().inflate(com.yalantis.ucrop.R.menu.ucrop_menu_activity, menu);
-
-        // Change crop & loader menu icons color to match the rest of the UI colors
-
-        MenuItem menuItemLoader = menu.findItem(com.yalantis.ucrop.R.id.menu_loader);
-        Drawable menuItemLoaderIcon = menuItemLoader.getIcon();
-        if (menuItemLoaderIcon != null) {
-            try {
-                menuItemLoaderIcon.mutate();
-                menuItemLoaderIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP);
-                menuItemLoader.setIcon(menuItemLoaderIcon);
-            } catch (IllegalStateException e) {
-                Log.i(TAG, String.format("%s - %s", e.getMessage(), getString(com.yalantis.ucrop.R.string.ucrop_mutate_exception_hint)));
+        iv_toolbar_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
-            ((Animatable) menuItemLoader.getIcon()).start();
-        }
+        });
 
-        MenuItem menuItemCrop = menu.findItem(com.yalantis.ucrop.R.id.menu_crop);
-        Drawable menuItemCropIcon = menuItemCrop.getIcon();
-        if (menuItemCropIcon != null) {
-            menuItemCropIcon.mutate();
-            menuItemCropIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP);
-            menuItemCrop.setIcon(menuItemCropIcon);
-        }
+        toolbar_crop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cropAndSaveImage();
+            }
+        });
 
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(com.yalantis.ucrop.R.id.menu_crop).setVisible(!mShowLoader);
-        menu.findItem(com.yalantis.ucrop.R.id.menu_loader).setVisible(mShowLoader);
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == com.yalantis.ucrop.R.id.menu_crop) {
-            cropAndSaveImage();
-        } else if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -240,49 +197,19 @@ public class MyUCropActivity extends AppCompatActivity {
 
     private void setupViews(@NonNull Intent intent) {
 
-        mStatusBarColor = intent.getIntExtra(UCrop.Options.EXTRA_STATUS_BAR_COLOR, ContextCompat.getColor(this, com.yalantis.ucrop.R.color.ucrop_color_statusbar));
-        mToolbarColor = intent.getIntExtra(UCrop.Options.EXTRA_TOOL_BAR_COLOR, ContextCompat.getColor(this, com.yalantis.ucrop.R.color.ucrop_color_toolbar));
-        mToolbarWidgetColor = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_WIDGET_COLOR_TOOLBAR, ContextCompat.getColor(this, com.yalantis.ucrop.R.color.ucrop_color_toolbar_widget));
         mToolbarTitle = intent.getStringExtra(UCrop.Options.EXTRA_UCROP_TITLE_TEXT_TOOLBAR);
         mToolbarTitle = !TextUtils.isEmpty(mToolbarTitle) ? mToolbarTitle : getResources().getString(com.yalantis.ucrop.R.string.ucrop_label_edit_photo);
         mLogoColor = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_LOGO_COLOR, ContextCompat.getColor(this, com.yalantis.ucrop.R.color.ucrop_color_default_logo));
 
-        setupAppBar();
-        initiateRootViews();
+        initRootViews();
 
     }
 
-    /**
-     * Configures and styles both status bar and toolbar.
-     */
-    private void setupAppBar() {
-        setStatusBarColor(mStatusBarColor);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        // Set all of the Toolbar coloring
-        toolbar.setBackgroundColor(mToolbarColor);
-        toolbar.setTitleTextColor(mToolbarWidgetColor);
-
-        final TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        toolbarTitle.setTextColor(mToolbarWidgetColor);
-        toolbarTitle.setText(mToolbarTitle);
-
-        // Color buttons inside the Toolbar
-        Drawable stateButtonDrawable = ContextCompat.getDrawable(this, com.yalantis.ucrop.R.drawable.ucrop_ic_cross).mutate();
-        stateButtonDrawable.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP);
-        toolbar.setNavigationIcon(stateButtonDrawable);
-
-        setSupportActionBar(toolbar);
-        final ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayShowTitleEnabled(false);
-        }
-
-    }
-
-    private void initiateRootViews() {
-        mUCropView = (UCropView) findViewById(R.id.ucrop);
+    private void initRootViews() {
+        mUCropView = findViewById(R.id.ucrop);
+        iv_toolbar_back = findViewById(R.id.iv_toolbar_back);
+        toolbar_crop = findViewById(R.id.toolbar_crop);
         mGestureCropImageView = mUCropView.getCropImageView();
         mOverlayView = mUCropView.getOverlayView();
 
@@ -306,7 +233,6 @@ public class MyUCropActivity extends AppCompatActivity {
         public void onLoadComplete() {
             mUCropView.animate().alpha(1).setDuration(300).setInterpolator(new AccelerateInterpolator());
             mBlockingView.setClickable(false);
-            mShowLoader = false;
             supportInvalidateOptionsMenu();
         }
 
@@ -318,22 +244,6 @@ public class MyUCropActivity extends AppCompatActivity {
 
     };
 
-
-    /**
-     * Sets status-bar color for L devices.
-     *
-     * @param color - status-bar color
-     */
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setStatusBarColor(@ColorInt int color) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            final Window window = getWindow();
-            if (window != null) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(color);
-            }
-        }
-    }
 
 
     private void setInitialState() {
@@ -365,7 +275,6 @@ public class MyUCropActivity extends AppCompatActivity {
 
     protected void cropAndSaveImage() {
         mBlockingView.setClickable(true);
-        mShowLoader = true;
         supportInvalidateOptionsMenu();
 
         mGestureCropImageView.cropAndSaveImage(mCompressFormat, mCompressQuality, new BitmapCropCallback() {

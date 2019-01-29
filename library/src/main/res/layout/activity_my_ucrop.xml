@@ -6,23 +6,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
+    <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/ucrop_color_toolbar"
-        android:minHeight="?attr/actionBarSize">
+        android:layout_height="60dp"
+        android:background="@color/ucrop_color_toolbar">
+
+        <ImageView
+            android:id="@+id/iv_toolbar_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/header_back"/>
 
         <TextView
             android:id="@+id/toolbar_title"
-            style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/ucrop_label_edit_photo"
-            android:textColor="@color/ucrop_color_toolbar_widget"/>
+            android:layout_centerInParent="true"
+            android:text="剪裁"
+            android:textColor="#fff"/>
 
-    </android.support.v7.widget.Toolbar>
+        <TextView
+            android:id="@+id/toolbar_crop"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="剪裁"
+            android:textColor="#fff"/>
+
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/ucrop_frame"
