@@ -178,12 +178,6 @@ public class PhotoPickerFragment extends Fragment {
 
                     }
                 }).show(getActivity().getSupportFragmentManager());
-//
-//                ImagePagerFragment imagePagerFragment =
-//                        ImagePagerFragment.newInstance(photos, index, screenLocation, v.getWidth(),
-//                                v.getHeight());
-//
-//                ((PhotoPickerActivity) getActivity()).addImagePagerFragment(imagePagerFragment);
             }
         });
 
@@ -214,7 +208,7 @@ public class PhotoPickerFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                // Log.d(">>> Picker >>>", "dy = " + dy);
+
                 if (Math.abs(dy) > SCROLL_THRESHOLD) {
                     mGlideRequestManager.pauseRequests();
                 } else {
@@ -240,7 +234,6 @@ public class PhotoPickerFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ActivityNotFoundException e) {
-            // TODO No Activity Found to handle Intent
             e.printStackTrace();
         }
     }
