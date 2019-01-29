@@ -1,5 +1,6 @@
 package com.dhq.picker;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -64,22 +65,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void addImg(ImageView imageView, int position, int count) {
                 int size = 9 - stringGridAdapter.getDatas().size();
-                ImagePickUtils.pickMulPic(MainActivity.this, size, new ImagePickUtils.PickMulCallBack() {
-
-                    @Override
-                    public void result(List<String> pics) {
-                        gridImgView.addDatas(pics);
-                    }
-
-                });
-
-//                ImagePickUtils.pickPic(MainActivity.this, new ImagePickUtils.PickSingleCallBack() {
+//                ImagePickUtils.pickMulPic(MainActivity.this, size, new ImagePickUtils.PickMulCallBack() {
 //
 //                    @Override
-//                    public void result(String imgPath, Bitmap picBitmap) {
-//                        gridImgView.addData(imgPath);
+//                    public void result(List<String> pics) {
+//                        gridImgView.addDatas(pics);
 //                    }
+//
 //                });
+
+                ImagePickUtils.pickPic(MainActivity.this, new ImagePickUtils.PickSingleCallBack() {
+
+                    @Override
+                    public void result(String imgPath, Bitmap picBitmap) {
+                        gridImgView.addData(imgPath);
+                    }
+                });
             }
         });
         gridImgView.setAdapter(stringGridAdapter);

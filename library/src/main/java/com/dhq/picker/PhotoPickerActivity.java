@@ -127,7 +127,6 @@ public class PhotoPickerActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ActivityNotFoundException e) {
-            // TODO No Activity Found to handle Intent
             e.printStackTrace();
         }
     }
